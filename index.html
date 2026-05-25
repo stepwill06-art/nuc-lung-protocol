@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuclear Medicine Lung V/Q Protocol Workflow</title>
+    <title>Nuclear Medicine Lung V/Q Protocol - Unified Guide</title>
     <style>
         * {
             margin: 0;
@@ -27,59 +27,70 @@
         }
 
         header h1 {
-            font-size: 2.5rem;
+            font-size: 2.2rem;
             margin-bottom: 0.5rem;
         }
 
         header p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
         }
 
-        nav {
+        /* TAB NAVIGATION */
+        .tab-container {
             background-color: #fff;
-            padding: 1rem;
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        nav ul {
-            list-style: none;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
+        .tabs {
             max-width: 1200px;
             margin: 0 auto;
+            display: flex;
+            border-bottom: 2px solid #e0e0e0;
         }
 
-        nav a {
-            text-decoration: none;
-            color: #1e3c72;
+        .tab-btn {
+            flex: 1;
+            padding: 1.2rem;
+            background: none;
+            border: none;
+            font-size: 1.1rem;
             font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 4px;
-            transition: background-color 0.3s;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
         }
 
-        nav a:hover {
-            background-color: #e0e0e0;
+        .tab-btn:hover {
+            background-color: #f5f5f5;
+            color: #1e3c72;
         }
 
-        main {
+        .tab-btn.active {
+            color: #1e3c72;
+            border-bottom-color: #2a5298;
+        }
+
+        .tab-btn .icon {
+            margin-right: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        /* CONTENT SECTIONS */
+        .tab-content {
+            display: none;
             max-width: 1000px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
 
-        .intro {
-            background: white;
-            padding: 2rem;
-            border-radius: 8px;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        .tab-content.active {
+            display: block;
         }
 
         section {
@@ -91,20 +102,12 @@
             border-left: 5px solid #2a5298;
         }
 
-        .pre-procedure {
-            border-left-color: #2196F3;
-        }
-
-        .ventilation {
-            border-left-color: #4CAF50;
-        }
-
-        .perfusion {
-            border-left-color: #FF9800;
-        }
-
-        .post-procedure {
-            border-left-color: #9C27B0;
+        .intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         section h2 {
@@ -178,6 +181,42 @@
             content: "🔴 CRITICAL: ";
             font-weight: bold;
             color: #721c24;
+        }
+
+        .info-box {
+            background-color: #e3f2fd;
+            border-left: 5px solid #2196F3;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .tips-box {
+            background-color: #fff3e0;
+            border-left: 5px solid #ff9800;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .tips-box::before {
+            content: "💡 TIP: ";
+            font-weight: bold;
+            color: #e65100;
+        }
+
+        .safe-box {
+            background-color: #e8f5e9;
+            border-left: 5px solid #4caf50;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 4px;
+        }
+
+        .safe-box::before {
+            content: "✓ SAFE: ";
+            font-weight: bold;
+            color: #2e7d32;
         }
 
         .equipment-box {
@@ -262,18 +301,6 @@
             box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
-        .phase-card.prep {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        .phase-card.vent {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
-        }
-
-        .phase-card.perf {
-            background: linear-gradient(135deg, #FF9800 0%, #E68900 100%);
-        }
-
         .phase-card h4 {
             margin-bottom: 0.5rem;
             font-size: 1.2rem;
@@ -284,19 +311,139 @@
             font-size: 0.95rem;
         }
 
+        .step-timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            margin: 1.5rem 0;
+        }
+
+        .timeline-step {
+            display: flex;
+            gap: 1.5rem;
+            padding: 1.5rem;
+            border-left: 3px solid #2a5298;
+            position: relative;
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .timeline-step:first-child {
+            border-radius: 8px 8px 0 0;
+        }
+
+        .timeline-step:last-child {
+            border-radius: 0 0 8px 8px;
+            border-bottom: none;
+        }
+
+        .step-number {
+            background-color: #2a5298;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            color: #1e3c72;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .faq-item {
+            margin: 1.5rem 0;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            background-color: #f5f5f5;
+            padding: 1.25rem;
+            cursor: pointer;
+            font-weight: 600;
+            color: #1e3c72;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            user-select: none;
+        }
+
+        .faq-question:hover {
+            background-color: #eeeeee;
+        }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        .faq-item.open .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 1.25rem;
+            background-color: #fafafa;
+            border-top: 1px solid #e0e0e0;
+            font-size: 1.05rem;
+        }
+
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+
+        .what-to-bring {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .bring-card {
+            background-color: #f0f4ff;
+            border: 2px solid #5c6bc0;
+            padding: 1.25rem;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .bring-card h4 {
+            color: #5c6bc0;
+            margin-bottom: 0.5rem;
+        }
+
         @media (max-width: 768px) {
             header h1 {
                 font-size: 1.8rem;
             }
 
-            nav ul {
+            .tabs {
                 flex-direction: column;
-                gap: 0.5rem;
             }
 
-            nav a {
-                display: block;
-                text-align: center;
+            .tab-btn {
+                border-bottom: none;
+                border-right: 3px solid transparent;
+                margin-right: -3px;
+            }
+
+            .tab-btn.active {
+                border-right-color: #2a5298;
+                border-bottom: none;
             }
 
             main {
@@ -313,7 +460,7 @@
                 background-color: white;
             }
 
-            nav {
+            .tab-container {
                 display: none;
             }
 
@@ -321,12 +468,10 @@
                 page-break-inside: avoid;
                 box-shadow: none;
                 border: 1px solid #ddd;
-                margin-bottom: 1.5rem;
             }
 
-            .checklist-item input[type="checkbox"] {
-                print-color-adjust: exact;
-                -webkit-print-color-adjust: exact;
+            .tab-content {
+                display: block !important;
             }
         }
 
@@ -379,545 +524,620 @@
 </head>
 <body>
     <header>
-        <h1>☢️ Nuclear Medicine Lung Protocol</h1>
-        <p>Ventilation/Perfusion (V/Q) Imaging Workflow</p>
+        <h1>☢️ Nuclear Medicine Lung V/Q Protocol</h1>
+        <p>Comprehensive Guide for Patients & Healthcare Providers</p>
     </header>
 
-    <nav>
-        <ul>
-            <li><a href="#overview">Overview</a></li>
-            <li><a href="#pre-procedure">Pre-Procedure</a></li>
-            <li><a href="#ventilation">Ventilation</a></li>
-            <li><a href="#perfusion">Perfusion</a></li>
-            <li><a href="#post-procedure">Post-Procedure</a></li>
-            <li><a href="#equipment">Equipment</a></li>
-            <li><a href="#checklist">Checklist</a></li>
-        </ul>
-    </nav>
+    <div class="tab-container">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('patient')">
+                <span class="icon">👤</span> Patient Guide
+            </button>
+            <button class="tab-btn" onclick="switchTab('provider')">
+                <span class="icon">🏥</span> Clinical Workflow
+            </button>
+        </div>
+    </div>
 
     <main>
-        <!-- OVERVIEW -->
-        <section class="intro" id="overview">
-            <h2><span class="icon">📋</span> Overview</h2>
-            <p><strong>Ventilation/Perfusion (V/Q) imaging</strong> is a nuclear medicine procedure used to evaluate lung ventilation and perfusion in patients with suspected pulmonary embolism (PE), chronic lung disease, and other respiratory conditions.</p>
-
-            <h3>Clinical Significance</h3>
-            <ul>
-                <li>Assesses regional lung ventilation and blood perfusion</li>
-                <li>Gold standard for PE diagnosis in patients with normal chest X-ray</li>
-                <li>Evaluates chronic lung disease, asthma, and COPD</li>
-                <li>Uses low radiation dose with <strong>Tc-99m radiopharmaceuticals</strong></li>
-            </ul>
-
-            <h3>Procedure Overview</h3>
-            <div class="phase-summary">
-                <div class="phase-card prep">
-                    <h4>1. Pre-Procedure</h4>
-                    <p>Patient assessment, chest X-ray, informed consent, IV line placement</p>
-                </div>
-                <div class="phase-card vent">
-                    <h4>2. Ventilation</h4>
-                    <p>Aerosol inhalation via nebulizer, posterior imaging</p>
-                </div>
-                <div class="phase-card perf">
-                    <h4>3. Perfusion</h4>
-                    <p>IV radiopharmaceutical injection, multi-angle imaging</p>
-                </div>
+        <!-- ===== PATIENT TAB ===== -->
+        <div id="patient" class="tab-content active">
+            <div class="intro">
+                <h2>Welcome! 👋</h2>
+                <p>You're scheduled for a <strong>lung imaging test</strong> (also called a V/Q scan or ventilation/perfusion scan). This guide will explain what to expect and help you prepare. Don't worry—this is a safe, painless test that takes about 45 minutes.</p>
             </div>
-        </section>
 
-        <!-- PRE-PROCEDURE -->
-        <section class="pre-procedure" id="pre-procedure">
-            <h2><span class="icon">🏥</span> Pre-Procedure Preparation</h2>
+            <!-- Patient Overview -->
+            <section class="intro">
+                <h2><span class="icon">❓</span> What Is This Test?</h2>
+                <p>This lung imaging test uses a special camera to take pictures of your lungs and see how well they're working. It has two parts:</p>
 
-            <h3>Patient Assessment</h3>
-            <div class="step">
-                <strong>Risk Stratification:</strong>
+                <h3>Part 1: Breathing Test (5-10 minutes)</h3>
+                <p>You'll breathe in a harmless mist through a mouthpiece. This mist helps the camera see how air moves into different parts of your lungs. You may feel a slight tickle in your throat—this is completely normal.</p>
+
+                <h3>Part 2: Injection Test (30-40 minutes)</h3>
+                <p>A small amount of radioactive dye will be injected into your arm through an IV. This dye flows through your blood to your lungs, and the special camera takes pictures showing how blood is circulating through them. You won't feel the dye—it's painless.</p>
+
+                <div class="info-box">
+                    <strong>Total Time:</strong> About 45 minutes (varies by individual)
+                </div>
+            </section>
+
+            <!-- Why You Need It -->
+            <section>
+                <h2><span class="icon">🏥</span> Why Do I Need This Test?</h2>
+                <p>Your doctor ordered this test to check for:</p>
                 <ul>
-                    <li>Evaluate pre-test probability using clinical criteria (Wells Score, D-dimer)</li>
-                    <li>Determine if low, intermediate, or high probability for PE</li>
-                    <li>Review contraindications and allergies</li>
+                    <li><strong>Blood clots in the lungs</strong> (pulmonary embolism)</li>
+                    <li><strong>Breathing problems</strong> caused by lung disease</li>
+                    <li><strong>Areas of your lungs not getting enough blood flow</strong></li>
+                    <li><strong>Other lung conditions</strong> that affect breathing and blood circulation</li>
                 </ul>
-            </div>
+                <p>This test is particularly helpful because it's very accurate and uses less radiation than many other imaging tests.</p>
+                <div class="safe-box">This test is one of the safest ways to evaluate how your lungs are working.</div>
+            </section>
 
-            <h3>Baseline Imaging</h3>
-            <div class="step">
-                <strong>Chest Radiograph (within 1 hour):</strong>
+            <!-- Preparation -->
+            <section>
+                <h2><span class="icon">✋</span> How to Prepare</h2>
+
+                <h3>Before Your Appointment</h3>
+                <div class="tips-box">
+                    <strong>Important Checklist:</strong>
+                    <ul style="margin-top: 1rem;">
+                        <li>✓ Tell your doctor if you're <strong>pregnant</strong> or think you might be</li>
+                        <li>✓ Tell your doctor if you're <strong>breastfeeding</strong></li>
+                        <li>✓ List all <strong>medications</strong> you're taking</li>
+                        <li>✓ Tell us about any <strong>allergies</strong></li>
+                        <li>✓ Bring your <strong>insurance card and ID</strong></li>
+                        <li>✓ Arrive <strong>15 minutes early</strong> to check in</li>
+                    </ul>
+                </div>
+
+                <h3>What to Wear</h3>
+                <p>Wear comfortable, loose-fitting clothes that are easy to remove (you may change into a hospital gown). Avoid clothes with metal buttons, zippers, or metal-lined pockets.</p>
+
+                <h3>Food and Drink</h3>
+                <div class="tips-box">You can eat and drink normally before your test. There's no need to fast or skip meals.</div>
+            </section>
+
+            <!-- What Happens -->
+            <section>
+                <h2><span class="icon">⏱️</span> What Happens During Your Test</h2>
+
+                <h3>Step-by-Step Timeline</h3>
+                <div class="step-timeline">
+                    <div class="timeline-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Check-In & Paperwork (10 minutes)</h4>
+                            <p>You'll sign in at the front desk and complete a brief health questionnaire. Staff will confirm your information and answer any quick questions.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>IV Line Placement (5 minutes)</h4>
+                            <p>A nurse will place a small IV (thin tube) in your arm. You may feel a brief pinch. This is how we'll give you the radioactive dye. A bandage will cover it.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Breathing Part of Test (5-10 minutes)</h4>
+                            <p>You'll be positioned in front of a special camera and asked to breathe in a mist through a mouthpiece. When you're told, you'll take a deep breath and hold it briefly while pictures are taken. This part is painless.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Rest & Injection (5 minutes)</h4>
+                            <p>You'll lie down on an imaging table. The technologist will slowly inject the radioactive dye through your IV. You won't feel anything unusual. Patients sometimes describe a very slight warm feeling—this is normal.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="step-number">5</div>
+                        <div class="step-content">
+                            <h4>Imaging (20-30 minutes)</h4>
+                            <p>The camera will rotate around you taking pictures from different angles. You'll need to stay still and hold your breath occasionally. The technologist will give clear instructions. You can ask for breaks if needed.</p>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="step-number">6</div>
+                        <div class="step-content">
+                            <h4>Finish & Recovery (5 minutes)</h4>
+                            <p>The IV line will be removed. You can go about your day immediately. No special care needed.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Safety -->
+            <section>
+                <h2><span class="icon">🛡️</span> Safety & Radiation</h2>
+
+                <h3>Is This Test Safe?</h3>
+                <p><strong>Yes.</strong> This is a very safe test used worldwide for decades. Millions of patients have had this procedure without problems.</p>
+
+                <h3>What About the Radioactive Dye?</h3>
+                <div class="safe-box">The amount of radioactive material used is <strong>extremely small</strong> and <strong>leaves your body naturally</strong> through urine within 24 hours. It causes no harm.</div>
+
+                <h3>Radiation Exposure</h3>
+                <p>The radiation dose from this test is <strong>very low</strong>—similar to the natural radiation you'd receive in about 2 years from your environment.</p>
+
+                <h3>After Your Test</h3>
                 <ul>
-                    <li>Obtain PA and lateral chest X-ray</li>
-                    <li>Essential for V/Q interpretation</li>
-                    <li>Identifies cardiopulmonary abnormalities</li>
+                    <li>You can go home right away—no restrictions</li>
+                    <li>No special care needed</li>
+                    <li>You can drive, work, and eat normally</li>
+                    <li>Resume all normal activities</li>
                 </ul>
-            </div>
 
-            <h3>Patient Preparation</h3>
-            <ul>
-                <li>Remove metallic objects and jewelry</li>
-                <li>Explain procedure and obtain informed consent</li>
-                <li>Establish IV access for radiopharmaceutical injection</li>
-                <li>Position patient supine or seated comfortably</li>
-                <li>Review breathing instructions</li>
-            </ul>
+                <div class="tips-box">Drink plenty of water to help flush the dye from your body. It will leave naturally through urine in 24 hours.</div>
+            </section>
 
-            <div class="caution">Assess for pregnancy or lactation. Consider alternative imaging if indicated.</div>
+            <!-- FAQ -->
+            <section>
+                <h2><span class="icon">❔</span> Frequently Asked Questions</h2>
 
-            <h3>Patient Instructions</h3>
-            <p>Instruct patient: <em>"You will breathe in a mist through a mouthpiece, then receive an IV injection. We will take pictures of your lungs from different angles. The procedure is painless and takes about 45 minutes."</em></p>
-        </section>
-
-        <!-- VENTILATION PHASE -->
-        <section class="ventilation" id="ventilation">
-            <h2><span class="icon">💨</span> Ventilation Phase</h2>
-
-            <h3>Radiopharmaceutical</h3>
-            <div class="equipment-box">
-                <div class="equipment-item">
-                    <h4>Tc-99m DTPA Aerosol</h4>
-                    <p><strong>Activity:</strong> 25-40 mCi (0.925-1.48 GBq)<br>
-                    <strong>Route:</strong> Inhalation via nebulizer<br>
-                    <strong>Purpose:</strong> Assesses regional ventilation</p>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Will the test hurt?
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        No. The only thing you might feel is a brief pinch when the IV is placed in your arm. The breathing part and imaging are completely painless.
+                    </div>
                 </div>
-            </div>
 
-            <h3>Equipment Setup</h3>
-            <div class="step">
-                <strong>Nebulizer Preparation:</strong>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Can I eat or drink before the test?
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Yes. You can eat and drink normally. There's no fasting required for this test. Have a regular breakfast if your appointment is in the morning.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        What if I'm claustrophobic?
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        This test is very different from an MRI or CT scan. The camera rotates around you, but you're not enclosed or confined in any way. The room is open and comfortable. Tell staff if you have any anxiety—they can help.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Will I be radioactive after the test?
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        No. You are not radioactive in any way. The tiny amount of dye used is quickly cleared from your body through normal urine. It's safe to be around family and friends immediately after the test.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        How long will it take?
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        Plan for about one hour total (45 minutes for the actual test plus 15 minutes for check-in). The actual imaging takes about 30-35 minutes.
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ===== PROVIDER TAB ===== -->
+        <div id="provider" class="tab-content">
+            <section class="intro">
+                <h2><span class="icon">📋</span> Clinical Overview</h2>
+                <p><strong>Ventilation/Perfusion (V/Q) imaging</strong> is a nuclear medicine procedure used to evaluate lung ventilation and perfusion in patients with suspected pulmonary embolism (PE), chronic lung disease, and other respiratory conditions.</p>
+
+                <h3>Clinical Significance</h3>
                 <ul>
-                    <li>Assemble disposable aerosol nebulizer per manufacturer instructions</li>
-                    <li>Place Tc-99m DTPA into nebulizer reservoir</li>
-                    <li>Connect to compressed air or oxygen source</li>
-                    <li>Verify mouthpiece is clean and functioning</li>
+                    <li>Assesses regional lung ventilation and blood perfusion</li>
+                    <li>Gold standard for PE diagnosis in patients with normal chest X-ray</li>
+                    <li>Evaluates chronic lung disease, asthma, and COPD</li>
+                    <li>Uses low radiation dose with <strong>Tc-99m radiopharmaceuticals</strong></li>
                 </ul>
-            </div>
 
-            <h3>Imaging Technique</h3>
-            <div class="step">
-                <strong>Positioning and Breath Hold:</strong>
+                <h3>Procedure Overview</h3>
+                <div class="phase-summary">
+                    <div class="phase-card">
+                        <h4>1. Pre-Procedure</h4>
+                        <p>Patient assessment, chest X-ray, informed consent, IV line placement</p>
+                    </div>
+                    <div class="phase-card" style="background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);">
+                        <h4>2. Ventilation</h4>
+                        <p>Aerosol inhalation via nebulizer, posterior imaging</p>
+                    </div>
+                    <div class="phase-card" style="background: linear-gradient(135deg, #FF9800 0%, #E68900 100%);">
+                        <h4>3. Perfusion</h4>
+                        <p>IV radiopharmaceutical injection, multi-angle imaging</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Pre-Procedure -->
+            <section>
+                <h2><span class="icon">🏥</span> Pre-Procedure Preparation</h2>
+
+                <h3>Patient Assessment</h3>
+                <div class="step">
+                    <strong>Risk Stratification:</strong>
+                    <ul>
+                        <li>Evaluate pre-test probability using clinical criteria (Wells Score, D-dimer)</li>
+                        <li>Determine if low, intermediate, or high probability for PE</li>
+                        <li>Review contraindications and allergies</li>
+                    </ul>
+                </div>
+
+                <h3>Baseline Imaging</h3>
+                <div class="step">
+                    <strong>Chest Radiograph (within 1 hour):</strong>
+                    <ul>
+                        <li>Obtain PA and lateral chest X-ray</li>
+                        <li>Essential for V/Q interpretation</li>
+                        <li>Identifies cardiopulmonary abnormalities</li>
+                    </ul>
+                </div>
+
+                <h3>Patient Preparation</h3>
                 <ul>
-                    <li><strong>Position patient:</strong> Upright in front of gamma camera</li>
-                    <li><strong>Anterior view preferred</strong> (posterior acceptable)</li>
-                    <li>Ensure lungs are centered in camera field of view</li>
+                    <li>Remove metallic objects and jewelry</li>
+                    <li>Explain procedure and obtain informed consent</li>
+                    <li>Establish IV access for radiopharmaceutical injection</li>
+                    <li>Position patient supine or seated comfortably</li>
+                    <li>Review breathing instructions</li>
                 </ul>
-            </div>
 
-            <h3>Administration Procedure</h3>
-            <ol>
-                <li>Instruct patient: <em>"Take a deep breath and exhale normally"</em></li>
-                <li>Introduce aerosol mist into breathing system</li>
-                <li>Instruct patient: <em>"Continue breathing the mist. Take a deep breath and hold it."</em></li>
-                <li>Obtain anterior image during breath hold (10-20 seconds)</li>
-                <li>Allow patient to breathe normally</li>
-                <li>Acquire additional projections (posterior, obliques, if protocol requires)</li>
-            </ol>
+                <div class="caution">Assess for pregnancy or lactation. Consider alternative imaging if indicated.</div>
+            </section>
 
-            <div class="critical">Ensure adequate breath hold for sharp, diagnostic images. Coaching patient improves image quality.</div>
+            <!-- Ventilation Phase -->
+            <section>
+                <h2><span class="icon">💨</span> Ventilation Phase</h2>
 
-            <h3>Image Acquisition</h3>
-            <table>
-                <tr>
-                    <th>View</th>
-                    <th>Duration</th>
-                    <th>Counts</th>
-                    <th>Notes</th>
-                </tr>
-                <tr>
-                    <td>Anterior</td>
-                    <td>10-20 sec</td>
-                    <td>300K-500K counts</td>
-                    <td>Primary view</td>
-                </tr>
-                <tr>
-                    <td>Posterior</td>
-                    <td>10-20 sec</td>
-                    <td>300K-500K counts</td>
-                    <td>May be omitted</td>
-                </tr>
-                <tr>
-                    <td>Obliques</td>
-                    <td>Optional</td>
-                    <td>Same</td>
-                    <td>If protocol requires</td>
-                </tr>
-            </table>
-
-            <div class="caution">Monitor patient for coughing or breathing difficulty. Allow rest if needed.</div>
-        </section>
-
-        <!-- PERFUSION PHASE -->
-        <section class="perfusion" id="perfusion">
-            <h2><span class="icon">💉</span> Perfusion Phase</h2>
-
-            <h3>Radiopharmaceutical</h3>
-            <div class="equipment-box">
-                <div class="equipment-item">
-                    <h4>Tc-99m MAA (Macroaggregated Albumin)</h4>
-                    <p><strong>Activity:</strong> 5-10 mCi (0.185-0.37 GBq)<br>
-                    <strong>Route:</strong> Intravenous injection<br>
-                    <strong>Purpose:</strong> Assesses pulmonary perfusion<br>
-                    <strong>Mechanism:</strong> Microparticles lodge in pulmonary capillaries</p>
+                <h3>Radiopharmaceutical</h3>
+                <div class="equipment-box">
+                    <div class="equipment-item">
+                        <h4>Tc-99m DTPA Aerosol</h4>
+                        <p><strong>Activity:</strong> 25-40 mCi (0.925-1.48 GBq)<br>
+                        <strong>Route:</strong> Inhalation via nebulizer<br>
+                        <strong>Purpose:</strong> Assesses regional ventilation</p>
+                    </div>
                 </div>
-            </div>
 
-            <h3>Pre-Injection Preparation</h3>
-            <div class="step">
-                <strong>Patient Positioning:</strong>
+                <h3>Equipment Setup</h3>
+                <div class="step">
+                    <strong>Nebulizer Preparation:</strong>
+                    <ul>
+                        <li>Assemble disposable aerosol nebulizer per manufacturer instructions</li>
+                        <li>Place Tc-99m DTPA into nebulizer reservoir</li>
+                        <li>Connect to compressed air or oxygen source</li>
+                        <li>Verify mouthpiece is clean and functioning</li>
+                    </ul>
+                </div>
+
+                <h3>Imaging Technique</h3>
+                <div class="step">
+                    <strong>Positioning and Breath Hold:</strong>
+                    <ul>
+                        <li><strong>Position patient:</strong> Upright in front of gamma camera</li>
+                        <li><strong>Anterior view preferred</strong> (posterior acceptable)</li>
+                        <li>Ensure lungs are centered in camera field of view</li>
+                    </ul>
+                </div>
+
+                <h3>Administration Procedure</h3>
+                <ol>
+                    <li>Instruct patient: <em>"Take a deep breath and exhale normally"</em></li>
+                    <li>Introduce aerosol mist into breathing system</li>
+                    <li>Instruct patient: <em>"Continue breathing the mist. Take a deep breath and hold it."</em></li>
+                    <li>Obtain anterior image during breath hold (10-20 seconds)</li>
+                    <li>Allow patient to breathe normally</li>
+                    <li>Acquire additional projections (posterior, obliques, if protocol requires)</li>
+                </ol>
+
+                <div class="critical">Ensure adequate breath hold for sharp, diagnostic images. Coaching patient improves image quality.</div>
+
+                <h3>Image Acquisition</h3>
+                <table>
+                    <tr>
+                        <th>View</th>
+                        <th>Duration</th>
+                        <th>Counts</th>
+                        <th>Notes</th>
+                    </tr>
+                    <tr>
+                        <td>Anterior</td>
+                        <td>10-20 sec</td>
+                        <td>300K-500K counts</td>
+                        <td>Primary view</td>
+                    </tr>
+                    <tr>
+                        <td>Posterior</td>
+                        <td>10-20 sec</td>
+                        <td>300K-500K counts</td>
+                        <td>May be omitted</td>
+                    </tr>
+                </table>
+
+                <div class="caution">Monitor patient for coughing or breathing difficulty. Allow rest if needed.</div>
+            </section>
+
+            <!-- Perfusion Phase -->
+            <section>
+                <h2><span class="icon">💉</span> Perfusion Phase</h2>
+
+                <h3>Radiopharmaceutical</h3>
+                <div class="equipment-box">
+                    <div class="equipment-item">
+                        <h4>Tc-99m MAA (Macroaggregated Albumin)</h4>
+                        <p><strong>Activity:</strong> 5-10 mCi (0.185-0.37 GBq)<br>
+                        <strong>Route:</strong> Intravenous injection<br>
+                        <strong>Purpose:</strong> Assesses pulmonary perfusion</p>
+                    </div>
+                </div>
+
+                <h3>Pre-Injection Preparation</h3>
+                <div class="step">
+                    <strong>Patient Positioning:</strong>
+                    <ul>
+                        <li>Position patient <strong>supine</strong> on imaging table</li>
+                        <li>Ensure IV line is patent and functioning</li>
+                    </ul>
+                </div>
+
+                <div class="critical">Patient MUST be supine during MAA injection to ensure uniform distribution.</div>
+
+                <h3>Injection Technique</h3>
+                <ol>
+                    <li>Inject Tc-99m MAA <strong>slowly over 3-5 seconds</strong> while flushing</li>
+                    <li><strong>Begin imaging immediately</strong> after injection</li>
+                    <li>Complete first image within 30 seconds of injection</li>
+                </ol>
+
+                <h3>Image Acquisition Protocol</h3>
+                <p>Acquire <strong>eight static images</strong> at different angles around the thorax:</p>
+                <table>
+                    <tr>
+                        <th>View</th>
+                        <th>Angle</th>
+                        <th>Duration</th>
+                        <th>Counts</th>
+                    </tr>
+                    <tr>
+                        <td>Anterior</td>
+                        <td>0°</td>
+                        <td>15-30 sec</td>
+                        <td>500K counts</td>
+                    </tr>
+                    <tr>
+                        <td>RAO/LAO</td>
+                        <td>45°/315°</td>
+                        <td>15-30 sec</td>
+                        <td>500K counts</td>
+                    </tr>
+                    <tr>
+                        <td>RL/LL</td>
+                        <td>90°/270°</td>
+                        <td>15-30 sec</td>
+                        <td>500K counts</td>
+                    </tr>
+                    <tr>
+                        <td>RPO/LPO</td>
+                        <td>135°/225°</td>
+                        <td>15-30 sec</td>
+                        <td>500K counts</td>
+                    </tr>
+                    <tr>
+                        <td>Posterior</td>
+                        <td>180°</td>
+                        <td>15-30 sec</td>
+                        <td>500K counts</td>
+                    </tr>
+                </table>
+
+                <div class="caution">Maintain patient immobility during imaging. Provide voice reassurance and alert button if anxiety develops.</div>
+            </section>
+
+            <!-- Post-Procedure -->
+            <section>
+                <h2><span class="icon">✓</span> Post-Procedure</h2>
+
+                <h3>Patient Care</h3>
                 <ul>
-                    <li>Position patient <strong>supine</strong> on imaging table</li>
-                    <li>Ensure IV line is patent and functioning</li>
-                    <li>Verify blood gas or pulse oximetry if indicated</li>
+                    <li>Remove IV line if no additional imaging planned</li>
+                    <li>Assess patient comfort and allow rest period</li>
+                    <li>Provide post-procedure instructions</li>
+                    <li>No restrictions on diet, activity, or driving</li>
+                    <li>Routine hydration encouraged to promote renal clearance</li>
                 </ul>
-            </div>
 
-            <div class="critical">Patient MUST be supine during MAA injection to ensure uniform distribution. Upright injection causes maldistribution to dependent lung bases.</div>
+                <h3>Image Processing</h3>
+                <div class="step">
+                    <strong>Data Handling:</strong>
+                    <ul>
+                        <li>Transfer images to workstation</li>
+                        <li>Apply routine attenuation and scatter corrections if available</li>
+                        <li>Generate standardized multiplanar images</li>
+                        <li>Archive images per HIPAA compliance</li>
+                    </ul>
+                </div>
 
-            <h3>Injection Technique</h3>
-            <ol>
-                <li>Instruct patient: <em>"You may feel slight warmth or mild chest tightness; this is normal and brief."</em></li>
-                <li>Verify IV line placement in upper extremity</li>
-                <li>Inject Tc-99m MAA <strong>slowly over 3-5 seconds</strong> while flushing</li>
-                <li><strong>Begin imaging immediately</strong> after injection</li>
-                <li>Complete first image within 30 seconds of injection</li>
-            </ol>
+                <h3>Interpretation Basics</h3>
+                <div class="expandable">Click to expand: Interpretation Guidelines</div>
+                <div class="expandable-content">
+                    <h4>Reporting Categories (PIOPED II):</h4>
+                    <ul>
+                        <li><strong>Normal/Near-Normal:</strong> No perfusion defects; PE unlikely</li>
+                        <li><strong>Low Probability:</strong> Ventilation/perfusion mismatch in &lt;2 segments</li>
+                        <li><strong>Intermediate Probability:</strong> Moderate V/Q mismatch; clinical correlation needed</li>
+                        <li><strong>High Probability:</strong> One or more large segmental perfusion defects with normal ventilation</li>
+                    </ul>
+                </div>
+            </section>
 
-            <h3>Image Acquisition Protocol</h3>
-            <p>Acquire <strong>eight static images</strong> at different angles around the thorax:</p>
-            <table>
-                <tr>
-                    <th>View</th>
-                    <th>Angle</th>
-                    <th>Duration</th>
-                    <th>Counts</th>
-                </tr>
-                <tr>
-                    <td>Anterior</td>
-                    <td>0°</td>
-                    <td>15-30 sec</td>
-                    <td>500K counts</td>
-                </tr>
-                <tr>
-                    <td>LAO</td>
-                    <td>45°</td>
-                    <td>15-30 sec</td>
-                    <td>500K counts</td>
-                </tr>
-                <tr>
-                    <td>LL</td>
-                    <td>90°</td>
-                    <td>15-30 sec</td>
-                    <td>500K counts</td>
-                </tr>
-                <tr>
-                    <td>LPO</td>
-                    <td>135°</td>
-                    <td>15-30 sec</td>
-                    <td>500K counts</td>
-                </tr>
-                <tr>
-                    <td>Posterior</td>
-                    <td>180°</td>
-                    <td>15-30 sec</td>
-                    <td>500K counts</td>
-                </tr>
-                <tr>
-                    <td>RPO</td>
-                    <td>225°</td>
-                    <td>15-30 sec</td>
-                    <td>500K counts</td>
-                </tr>
-                <tr>
-                    <td>RL</td>
-                    <td>270°</td>
-                    <td>15-30 sec</td>
-                    <td>500K counts</td>
-                </tr>
-                <tr>
-                    <td>RAO</td>
-                    <td>315°</td>
-                    <td>15-30 sec</td>
-                    <td>500K counts</td>
-                </tr>
-            </table>
+            <!-- Equipment & Materials -->
+            <section>
+                <h2><span class="icon">⚙️</span> Equipment & Materials</h2>
 
-            <div class="caution">Maintain patient immobility during imaging. Provide voice reassurance and alert button if anxiety develops.</div>
+                <h3>Required Equipment</h3>
+                <div class="equipment-box">
+                    <div class="equipment-item">
+                        <h4>Gamma Camera</h4>
+                        <p>Dual-head or multi-head system with low-energy, high-resolution collimator</p>
+                    </div>
+                    <div class="equipment-item">
+                        <h4>Aerosol Nebulizer</h4>
+                        <p>Disposable system compatible with Tc-99m DTPA</p>
+                    </div>
+                    <div class="equipment-item">
+                        <h4>IV Equipment</h4>
+                        <p>18-20 gauge IV catheter, normal saline flush, tourniquet</p>
+                    </div>
+                </div>
 
-            <h3>Quality Assurance</h3>
-            <ul>
-                <li>Verify adequate radiopharmaceutical distribution</li>
-                <li>Check for unexpected uptake (liver, spleen, thyroid)</li>
-                <li>Assess image quality and count statistics</li>
-                <li>Confirm correct patient positioning for all projections</li>
-            </ul>
-        </section>
+                <h3>Radiopharmaceuticals</h3>
+                <table>
+                    <tr>
+                        <th>Agent</th>
+                        <th>Activity</th>
+                        <th>Route</th>
+                        <th>Purpose</th>
+                        <th>Half-Life</th>
+                    </tr>
+                    <tr>
+                        <td>Tc-99m DTPA Aerosol</td>
+                        <td>25-40 mCi</td>
+                        <td>Inhalation</td>
+                        <td>Ventilation imaging</td>
+                        <td>6 hours</td>
+                    </tr>
+                    <tr>
+                        <td>Tc-99m MAA</td>
+                        <td>5-10 mCi</td>
+                        <td>IV injection</td>
+                        <td>Perfusion imaging</td>
+                        <td>6 hours</td>
+                    </tr>
+                </table>
+            </section>
 
-        <!-- POST-PROCEDURE -->
-        <section class="post-procedure" id="post-procedure">
-            <h2><span class="icon">✓</span> Post-Procedure</h2>
+            <!-- Checklists -->
+            <section>
+                <h2><span class="icon">☑️</span> Quality Assurance Checklists</h2>
 
-            <h3>Patient Care</h3>
-            <ul>
-                <li>Remove IV line if no additional imaging planned</li>
-                <li>Assess patient comfort and allow rest period</li>
-                <li>Provide post-procedure instructions</li>
-                <li>No restrictions on diet, activity, or driving</li>
-                <li>Routine hydration encouraged to promote renal clearance</li>
-            </ul>
+                <h3>Pre-Procedure Checklist</h3>
+                <div class="checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="c1">
+                        <label for="c1">Patient ID verified and consent obtained</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="c2">
+                        <label for="c2">Pregnancy status assessed</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="c3">
+                        <label for="c3">Chest X-ray obtained within 1 hour</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="c4">
+                        <label for="c4">IV access established (upper extremity)</label>
+                    </div>
+                </div>
 
-            <h3>Image Processing</h3>
-            <div class="step">
-                <strong>Data Handling:</strong>
-                <ul>
-                    <li>Transfer images to workstation</li>
-                    <li>Apply routine attenuation and scatter corrections if available</li>
-                    <li>Generate standardized multiplanar images</li>
-                    <li>Archive images per HIPAA compliance</li>
-                </ul>
-            </div>
+                <h3>Ventilation Phase Checklist</h3>
+                <div class="checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="v1">
+                        <label for="v1">Tc-99m DTPA loaded into nebulizer</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="v2">
+                        <label for="v2">Camera positioned for anterior view</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="v3">
+                        <label for="v3">Patient instructed on breath hold</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="v4">
+                        <label for="v4">Anterior image acquired (300K-500K counts)</label>
+                    </div>
+                </div>
 
-            <h3>Interpretation Basics</h3>
-            <div class="expandable">Click to expand: Interpretation Guidelines</div>
-            <div class="expandable-content">
-                <h4>Reporting Categories (PIOPED II):</h4>
-                <ul>
-                    <li><strong>Normal/Near-Normal:</strong> No perfusion defects; PE unlikely</li>
-                    <li><strong>Low Probability:</strong> Ventilation/perfusion mismatch in &lt;2 segments</li>
-                    <li><strong>Intermediate Probability:</strong> Moderate V/Q mismatch; clinical correlation needed</li>
-                    <li><strong>High Probability:</strong> One or more large segmental perfusion defects with normal ventilation</li>
-                </ul>
-                <h4>Key Interpretation Principles:</h4>
-                <ul>
-                    <li><strong>Mismatch Pattern:</strong> Perfusion defect with normal ventilation (suspicious for PE)</li>
-                    <li><strong>Match Pattern:</strong> Ventilation and perfusion defect together (suggests pneumonia, COPD)</li>
-                    <li><strong>Always compare with chest X-ray</strong> for clinical correlation</li>
-                </ul>
-            </div>
-
-            <h3>Reporting</h3>
-            <ul>
-                <li>Formal interpretation by qualified nuclear medicine physician</li>
-                <li>Report probability assessment for pulmonary embolism</li>
-                <li>Correlate with clinical presentation and chest radiograph</li>
-                <li>Recommend follow-up imaging if indicated (CT angiography)</li>
-            </ul>
-
-            <h3>Radiation Safety</h3>
-            <p><strong>Effective Dose:</strong> ~2-4 mSv (similar to 2-year background exposure)</p>
-            <ul>
-                <li>No contact restrictions required</li>
-                <li>Inform patient regarding normal radiation clearance in 24-48 hours</li>
-                <li>Document in patient record</li>
-            </ul>
-        </section>
-
-        <!-- EQUIPMENT & MATERIALS -->
-        <section id="equipment">
-            <h2><span class="icon">⚙️</span> Equipment & Materials</h2>
-
-            <h3>Required Equipment</h3>
-            <div class="equipment-box">
-                <div class="equipment-item">
-                    <h4>Gamma Camera</h4>
-                    <p>Dual-head or multi-head system with low-energy, high-resolution collimator</p>
+                <h3>Perfusion Phase Checklist</h3>
+                <div class="checklist">
+                    <div class="checklist-item">
+                        <input type="checkbox" id="p1">
+                        <label for="p1">Patient repositioned supine</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="p2">
+                        <label for="p2">IV line patent and verified</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="p3">
+                        <label for="p3">Tc-99m MAA syringe prepared and assayed</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="p4">
+                        <label for="p4">MAA injected slowly over 3-5 seconds</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="p5">
+                        <label for="p5">Imaging started immediately after injection</label>
+                    </div>
+                    <div class="checklist-item">
+                        <input type="checkbox" id="p6">
+                        <label for="p6">Eight views completed (500K counts each)</label>
+                    </div>
                 </div>
-                <div class="equipment-item">
-                    <h4>Aerosol Nebulizer</h4>
-                    <p>Disposable system compatible with Tc-99m DTPA, with mouthpiece and filters</p>
-                </div>
-                <div class="equipment-item">
-                    <h4>Imaging Workstation</h4>
-                    <p>Computer system for image reconstruction, processing, and archiving</p>
-                </div>
-                <div class="equipment-item">
-                    <h4>IV Equipment</h4>
-                    <p>18-20 gauge IV catheter, normal saline flush, tourniquet, alcohol prep pads</p>
-                </div>
-                <div class="equipment-item">
-                    <h4>Monitoring Equipment</h4>
-                    <p>Pulse oximeter, blood pressure cuff, oxygen if needed</p>
-                </div>
-                <div class="equipment-item">
-                    <h4>Safety Equipment</h4>
-                    <p>Radiation detection meter, emergency supplies, lead shielding as needed</p>
-                </div>
-            </div>
-
-            <h3>Radiopharmaceuticals</h3>
-            <table>
-                <tr>
-                    <th>Agent</th>
-                    <th>Activity</th>
-                    <th>Route</th>
-                    <th>Purpose</th>
-                    <th>Half-Life</th>
-                </tr>
-                <tr>
-                    <td>Tc-99m DTPA Aerosol</td>
-                    <td>25-40 mCi</td>
-                    <td>Inhalation</td>
-                    <td>Ventilation imaging</td>
-                    <td>6 hours</td>
-                </tr>
-                <tr>
-                    <td>Tc-99m MAA</td>
-                    <td>5-10 mCi</td>
-                    <td>IV injection</td>
-                    <td>Perfusion imaging</td>
-                    <td>6 hours</td>
-                </tr>
-            </table>
-
-            <h3>Supplies Checklist</h3>
-            <ul>
-                <li>Patient gown and non-metallic items</li>
-                <li>IV tubing, syringes, needles</li>
-                <li>Sterile gauze and tape</li>
-                <li>Emergency medications (diphenhydramine, epinephrine)</li>
-                <li>Absorbent pads for table</li>
-                <li>Waste container for radioactive materials</li>
-            </ul>
-        </section>
-
-        <!-- QUICK REFERENCE CHECKLIST -->
-        <section id="checklist">
-            <h2><span class="icon">☑️</span> Quick Reference Checklist</h2>
-
-            <h3>Pre-Procedure Checklist</h3>
-            <div class="checklist">
-                <div class="checklist-item">
-                    <input type="checkbox" id="c1">
-                    <label for="c1">Patient ID verified and consent obtained</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="c2">
-                    <label for="c2">Pregnancy status assessed</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="c3">
-                    <label for="c3">Chest X-ray obtained within 1 hour</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="c4">
-                    <label for="c4">IV access established (upper extremity)</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="c5">
-                    <label for="c5">Patient positioned and coached on breathing</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="c6">
-                    <label for="c6">Nebulizer assembled and tested</label>
-                </div>
-            </div>
-
-            <h3>Ventilation Phase Checklist</h3>
-            <div class="checklist">
-                <div class="checklist-item">
-                    <input type="checkbox" id="v1">
-                    <label for="v1">Tc-99m DTPA loaded into nebulizer</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="v2">
-                    <label for="v2">Camera positioned for anterior view</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="v3">
-                    <label for="v3">Patient instructed on breath hold</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="v4">
-                    <label for="v4">Anterior image acquired (300K-500K counts)</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="v5">
-                    <label for="v5">Additional projections completed per protocol</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="v6">
-                    <label for="v6">Image quality acceptable (patient cooperation)</label>
-                </div>
-            </div>
-
-            <h3>Perfusion Phase Checklist</h3>
-            <div class="checklist">
-                <div class="checklist-item">
-                    <input type="checkbox" id="p1">
-                    <label for="p1">Patient repositioned supine</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="p2">
-                    <label for="p2">IV line patent and verified</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="p3">
-                    <label for="p3">Tc-99m MAA syringe prepared and assayed</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="p4">
-                    <label for="p4">Camera positioned for imaging</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="p5">
-                    <label for="p5">MAA injected slowly over 3-5 seconds</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="p6">
-                    <label for="p6">Imaging started immediately after injection</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="p7">
-                    <label for="p7">Eight views completed (500K counts each)</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="p8">
-                    <label for="p8">Image quality assessment passed</label>
-                </div>
-            </div>
-
-            <h3>Post-Procedure Checklist</h3>
-            <div class="checklist">
-                <div class="checklist-item">
-                    <input type="checkbox" id="po1">
-                    <label for="po1">IV line removed and site checked</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="po2">
-                    <label for="po2">Patient stable and comfortable</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="po3">
-                    <label for="po3">Post-procedure instructions provided</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="po4">
-                    <label for="po4">Images transferred to workstation</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="po5">
-                    <label for="po5">Data archived per protocol</label>
-                </div>
-                <div class="checklist-item">
-                    <input type="checkbox" id="po6">
-                    <label for="po6">Radiation exposure documented</label>
-                </div>
-            </div>
-        </section>
-
-        <div style="margin-top: 3rem; padding: 2rem; background-color: #f0f8ff; border-radius: 8px;">
-            <h3>🔗 References & Standards</h3>
-            <ul>
-                <li><strong>SNM Practice Guideline for Lung Scintigraphy 4.0</strong> — Society of Nuclear Medicine and Molecular Imaging</li>
-                <li><strong>PIOPED II Criteria</strong> — PE diagnosis probability assessment</li>
-                <li>Institutional protocols and quality assurance standards</li>
-                <li>Radiation Safety and HIPAA Compliance requirements</li>
-            </ul>
+            </section>
         </div>
     </main>
 
     <footer>
-        <p>&copy; 2024 Nuclear Medicine Workflow Documentation. For clinical use only. Always follow institutional protocols and consult supervising radiologist.</p>
+        <p>&copy; 2024 Nuclear Medicine Lung Protocol. For clinical use only. Always follow institutional protocols and consult supervising radiologist.</p>
     </footer>
 
     <script>
-        // Expandable sections functionality
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Add active class to clicked button
+            event.target.closest('.tab-btn').classList.add('active');
+        }
+
+        // FAQ toggle functionality
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                this.parentElement.classList.toggle('open');
+            });
+        });
+
+        // Expandable sections
         document.querySelectorAll('.expandable').forEach(item => {
             item.addEventListener('click', function() {
                 this.classList.toggle('open');
